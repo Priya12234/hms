@@ -144,7 +144,7 @@ class _ChangeRoomPageState extends State<ChangeRoomPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey, // Assign the GlobalKey
-      drawer: CustomNavigationBar(
+      drawer: const CustomNavigationBar(
           firstName: "your firstname"), // Custom drawer with navigation
 
       appBar: PreferredSize(

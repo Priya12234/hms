@@ -113,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: CustomNavigationBar(
+      drawer: const CustomNavigationBar(
           firstName: "your firstname"), // Custom drawer with navigation
 
       appBar: CustomAppBar(
@@ -148,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ChangeRoomPage(),
+                                  builder: (context) => const ChangeRoomPage(),
                                 ),
                               );
                             }

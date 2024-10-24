@@ -52,7 +52,7 @@ class CustomNavigationBar extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        AdminHomePage(), // Use the variable here
+                        const AdminHomePage(), // Use the variable here
                   ),
                 );
               },
@@ -65,7 +65,7 @@ class CustomNavigationBar extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AdminPage()),
+                  MaterialPageRoute(builder: (context) => const AdminPage()),
                 );
               },
             ),
@@ -77,7 +77,7 @@ class CustomNavigationBar extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AdminFeesDetails()),
+                  MaterialPageRoute(builder: (context) => const AdminFeesDetails()),
                 );
               },
             ),

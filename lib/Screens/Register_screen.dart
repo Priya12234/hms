@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hms/Screens/home_screen.dart';
 import 'Login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -53,6 +52,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
           'course': _courseController.text.trim(),
         });
 
+        // Show success SnackBar
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Registration Successful!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+
         Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => const LoginScreen(), // Navigate to LoginScreen
         ));
@@ -63,19 +70,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
         } else if (e.code == 'email-already-in-use') {
           message = 'An account already exists for that email.';
         }
-        showDialog(
-          context: context,
-          builder: (ctx) => AlertDialog(
-            title: const Text("Signup Failed"),
+
+        // Show error SnackBar
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
             content: Text(message),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(ctx).pop();
-                },
-                child: const Text("Okay"),
-              ),
-            ],
+            backgroundColor: Colors.red,
           ),
         );
       }

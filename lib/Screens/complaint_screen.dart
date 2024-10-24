@@ -27,7 +27,7 @@ class ComplaintMenuPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: CustomNavigationBar(
+      drawer: const CustomNavigationBar(
           firstName: "your firstname"), // Custom drawer with navigation
 
       body: Column(
@@ -145,7 +145,7 @@ class ComplaintItem extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ComplaintFormPage(),
+            builder: (context) => const ComplaintFormPage(),
           ),
         );
       },

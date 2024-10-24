@@ -26,7 +26,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: CustomNavigationBar(
+      drawer: const CustomNavigationBar(
           firstName: "your firstname"), // Custom drawer with navigation
 
       backgroundColor: const Color(0xFFE6F4EC), // Light background color

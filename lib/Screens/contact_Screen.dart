@@ -3,10 +3,12 @@ import 'package:hms/Screens/drawer_screen.dart';
 import 'package:hms/Screens/home_screen.dart';
 
 void main() {
-  runApp(ContactPageApp());
+  runApp(const ContactPageApp());
 }
 
 class ContactPageApp extends StatelessWidget {
+  const ContactPageApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -14,18 +16,20 @@ class ContactPageApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: ContactPage(),
+      home: const ContactPage(),
     );
   }
 }
 
 class ContactPage extends StatelessWidget {
+  const ContactPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: CustomNavigationBar(firstName: '',), // Custom drawer with navigation
+      drawer: const CustomNavigationBar(firstName: '',), // Custom drawer with navigation
 
-      backgroundColor: Color(0xFFE6F4EC),
+      backgroundColor: const Color(0xFFE6F4EC),
       appBar: CustomAppBar(
         title: "Contact Page",
         onProfilePressed: () {
@@ -33,7 +37,7 @@ class ContactPage extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => HomePage(firstName: '',)), // Example navigation
+                builder: (context) => const HomePage(firstName: '',)), // Example navigation
           );
         },
       ),
@@ -48,16 +52,16 @@ class ContactPage extends StatelessWidget {
                 height: 250,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
+                  image: const DecorationImage(
                     image: AssetImage(
                         'assets/contact_support.png'), // Correct path to your image
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -66,11 +70,11 @@ class ContactPage extends StatelessWidget {
                       color: Colors.grey.withOpacity(0.5),
                       spreadRadius: 2,
                       blurRadius: 7,
-                      offset: Offset(0, 3),
+                      offset: const Offset(0, 3),
                     ),
                   ],
                 ),
-                child: Column(
+                child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -130,10 +134,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onProfilePressed;
 
   const CustomAppBar({
-    Key? key,
+    super.key,
     required this.title,
     required this.onProfilePressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

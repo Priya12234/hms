@@ -38,13 +38,13 @@ class RequestCard extends StatelessWidget {
                   onPressed: onConfirm,
                   style: ButtonStyle(
                       backgroundColor: WidgetStateProperty.all(Colors.green)),
-                  child: Text('Confirm'),
+                  child: const Text('Confirm'),
                 ),
                 ElevatedButton(
                   onPressed: onCancel,
                   style: ButtonStyle(
                       backgroundColor: WidgetStateProperty.all(Colors.red)),
-                  child: Text('Cancel'),
+                  child: const Text('Cancel'),
                 ),
               ],
             )
