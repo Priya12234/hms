@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hms/Screens/Register_screen.dart';
 import 'package:hms/Screens/home_screen.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -30,28 +30,27 @@ class _LoginScreenState extends State<LoginScreen> {
   void _login() async {
     if (_formKey.currentState!.validate()) {
       try {
-        // Sign in user with email and password
         UserCredential userCredential = await _auth.signInWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
         );
 
-        // Fetch user data from Firestore
+        // Save user ID to SharedPreferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('userId', userCredential.user!.uid);
+
         DocumentSnapshot userDoc = await _firestore
             .collection('users')
             .doc(userCredential.user?.uid)
             .get();
 
-        // Extract firstName to display on the home screen
         String firstName = userDoc['firstName'] ?? 'User';
 
-        // Navigate to the HomePage and pass the user's first name
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => HomePage(
-                    firstName: firstName,
-                  )),
+            builder: (context) => HomePage(firstName: firstName),
+          ),
         );
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
@@ -106,8 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                _buildTextField(
-                    _emailController, 'Email', Icons.email_outlined),
+                _buildTextField(_emailController, 'Email', Icons.email_outlined),
                 _buildPasswordTextField(),
                 const SizedBox(height: 30),
                 _loginButton(),

@@ -10,13 +10,21 @@ class FeeDetails extends StatefulWidget {
 }
 
 class _FeeDetailsState extends State<FeeDetails> {
+  // Function to handle status update (paid/unpaid) in Firestore
+  Future<void> updateStatus(String documentId, String status) async {
+    await FirebaseFirestore.instance
+        .collection('admin_fees_details')
+        .doc(documentId)
+        .update({'status': status});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column( // Use Column to include HeaderWidget and StreamBuilder
+      body: Column(
         children: [
           const HeaderWidget(title: 'Fees Details'), // Add the HeaderWidget here
-          Expanded( // Use Expanded to ensure StreamBuilder takes up available space
+          Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('admin_fees_details')
@@ -35,33 +43,51 @@ class _FeeDetailsState extends State<FeeDetails> {
                 return SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal, // Horizontal scrolling enabled
+                    scrollDirection: Axis.horizontal,
                     child: DataTable(
                       border: TableBorder.all(
-                        width: 1, 
+                        width: 1,
                         color: Colors.grey,
                       ), // Adding border to the table
                       columns: const [
+                        DataColumn(label: Text('Email')),
                         DataColumn(label: Text('Building')),
                         DataColumn(label: Text('Type')),
                         DataColumn(label: Text('Fees')),
                         DataColumn(label: Text('Status')),
                         DataColumn(label: Text('Date')),
+                        
                       ],
                       rows: documents.map<DataRow>((doc) {
                         final data = doc.data() as Map<String, dynamic>;
-                        final statusColor =
-                            data['status'] == 'paid' ? Colors.green : Colors.red;
+                        final documentId = doc.id; // Get document ID for updating
+
+                        final String status = data['status'];
+                        final bool isPaid = status == 'paid';
+                        final Color statusColor = isPaid ? Colors.green : Colors.red;
+                        final String statusLabel = isPaid ? 'Paid' : 'Unpaid';
 
                         return DataRow(
                           cells: [
+                            DataCell(Text(data['email'])),
                             DataCell(Text(data['building'])),
                             DataCell(Text(data['type'])),
-                            DataCell(Text(data['fees'].toString())), // Ensure fees is displayed correctly
+                            DataCell(Text(data['fees'].toString())), // Ensure fees are displayed correctly
                             DataCell(
-                              Text(
-                                data['status'],
-                                style: TextStyle(color: statusColor),
+                              ElevatedButton(
+                                onPressed: isPaid
+                                    ? null // Disable the button if already paid
+                                    : () {
+                                        updateStatus(documentId, 'paid');
+                                      },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: statusColor, // Set green for paid, red for unpaid
+                                  minimumSize: const Size(80, 40), // Button size
+                                ),
+                                child: Text(
+                                  statusLabel,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
                               ),
                             ),
                             DataCell(Text(data['date'])),
