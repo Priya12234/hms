@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hms/Admin_Screens/admin_home_screen.dart';
 import 'package:hms/Screens/Register_screen.dart';
 import 'package:hms/Screens/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,13 +46,25 @@ class _LoginScreenState extends State<LoginScreen> {
             .get();
 
         String firstName = userDoc['firstName'] ?? 'User';
+        String email = _emailController.text.trim();
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomePage(firstName: firstName),
-          ),
-        );
+        if (email == 'pchauhan862@rku.ac.in') {
+          // Navigate to Admin Dashboard
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AdminHome(), // Replace with your Admin Dashboard
+            ),
+          );
+        } else {
+          // Navigate to Home Page
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(firstName: firstName),
+            ),
+          );
+        }
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           _showDialog('Error', 'No user found for that email.');

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class AdminPage extends StatefulWidget {
-  const AdminPage({super.key});
+class AdminStudentDetails extends StatefulWidget {
+  const AdminStudentDetails({super.key});
 
   @override
-  _AdminPageState createState() => _AdminPageState();
+  _AdminStudentDetailsState createState() => _AdminStudentDetailsState();
 }
 
-class _AdminPageState extends State<AdminPage> {
+class _AdminStudentDetailsState extends State<AdminStudentDetails> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override

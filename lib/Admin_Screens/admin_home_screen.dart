@@ -1,127 +1,38 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hms/Admin_Screens/admin_custom_app_bar.dart';
+import 'package:hms/Admin_Screens/admin_custom_drawer.dart';
 
-// Custom AppBar widget
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
-  final VoidCallback onProfilePressed;
 
-  const CustomAppBar({
-    super.key,
-    required this.title,
-    required this.onProfilePressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(
-        top: 20,
-        bottom: 20,
-        left: 16,
-        right: 16,
-      ),
-      decoration: const BoxDecoration(
-        color: Color(0xFF33665A),
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Icon(
-                Icons.menu,
-                color: Colors.white,
-                size: 30.0,
-              ),
-              IconButton(
-                icon: const Icon(
-                  Icons.person,
-                  color: Colors.white,
-                  size: 30.0,
-                ),
-                onPressed: onProfilePressed,
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Center(
-            child: Text(
-              title,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(150);
-}
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(); // Initialize Firebase
-  runApp(const AdminHomePage());
-}
-
-class AdminHomePage extends StatelessWidget {
-  const AdminHomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Admin Home',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: const AdminHome(),
-    );
-  }
-}
 
 class AdminHome extends StatefulWidget {
-  const AdminHome({super.key});
+  const AdminHome({Key? key}) : super(key: key);
 
   @override
   _AdminHomeState createState() => _AdminHomeState();
 }
 
 class _AdminHomeState extends State<AdminHome> {
-  // Controllers for the text fields
   final _breakfastController = TextEditingController();
   final _lunchController = TextEditingController();
   final _snacksController = TextEditingController();
   final _dinnerController = TextEditingController();
 
-  // Function to upload menu data to Firestore
   Future<void> uploadMenu() async {
     await FirebaseFirestore.instance.collection('admin_food_menu').add({
       'breakfast': _breakfastController.text,
       'lunch': _lunchController.text,
       'snacks': _snacksController.text,
       'dinner': _dinnerController.text,
-      'timestamp': FieldValue.serverTimestamp(), // Add timestamp if needed
+      'timestamp': FieldValue.serverTimestamp(),
     });
 
-    // Clear the text fields after uploading
     _breakfastController.clear();
     _lunchController.clear();
     _snacksController.clear();
     _dinnerController.clear();
 
-    // Show a snackbar or some message to confirm upload
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Menu uploaded successfully!')),
     );
@@ -131,12 +42,13 @@ class _AdminHomeState extends State<AdminHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFE6F4EC),
-      appBar: CustomAppBar(
-        title: 'Welcome!',
+      appBar: AdminCustomAppBar(
+        title: 'Welcome Admin!',
         onProfilePressed: () {
-          // Add your profile action here
+          // Profile action
         },
       ),
+      drawer: const AdminCustomDrawer(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -177,7 +89,7 @@ class _AdminHomeState extends State<AdminHome> {
               const SizedBox(height: 20),
               Center(
                 child: ElevatedButton(
-                  onPressed: uploadMenu, // Call uploadMenu on button press
+                  onPressed: uploadMenu,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF3D6257),
                     padding: const EdgeInsets.symmetric(
@@ -227,7 +139,7 @@ class _AdminHomeState extends State<AdminHome> {
               child: Container(
                 margin: const EdgeInsets.only(top: 8),
                 child: TextField(
-                  controller: controller, // Use the appropriate controller
+                  controller: controller,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
@@ -238,41 +150,6 @@ class _AdminHomeState extends State<AdminHome> {
                     ),
                   ),
                 ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildComplaintCard(String complaint, String dateTime) {
-    return Container(
-      width: double.infinity,
-      height: 80,
-      decoration: BoxDecoration(
-        color: const Color(0xFF3D6257),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              complaint,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              dateTime,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 14,
               ),
             ),
           ],
