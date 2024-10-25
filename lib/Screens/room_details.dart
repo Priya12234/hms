@@ -113,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const CustomNavigationBar(
+      drawer: const CustomDrawer(
           firstName: "your firstname"), // Custom drawer with navigation
 
       appBar: CustomAppBar(

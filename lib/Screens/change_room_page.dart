@@ -1,80 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hms/Screens/drawer_screen.dart';
-
-// HeaderWidget Class Definition
-class HeaderWidget extends StatelessWidget {
-  final String title;
-  final IconData leftIcon;
-  final IconData rightIcon;
-  final VoidCallback onRightIconPressed;
-  final VoidCallback onLeftIconPressed;
-
-  const HeaderWidget({
-    super.key,
-    required this.title,
-    this.leftIcon = Icons.menu,
-    this.rightIcon = Icons.person,
-    required this.onRightIconPressed,
-    required this.onLeftIconPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(
-        top: 20,
-        bottom: 20,
-        left: 16,
-        right: 16,
-      ), // Padding for status bar and content
-      decoration: const BoxDecoration(
-        color: Color(0xFF33665A), // Background color
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                icon: Icon(
-                  leftIcon,
-                  color: Colors.white,
-                  size: 30.0,
-                ),
-                onPressed: onLeftIconPressed,
-              ),
-              IconButton(
-                icon: Icon(
-                  rightIcon,
-                  color: Colors.white,
-                  size: 30.0,
-                ),
-                onPressed: onRightIconPressed,
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Center(
-            child: Text(
-              title,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+import 'package:hms/Screens/header_widget.dart'; // Import the HeaderWidget
 
 // ChangeRoomPage Class Definition
 class ChangeRoomPage extends StatefulWidget {
@@ -144,133 +71,123 @@ class _ChangeRoomPageState extends State<ChangeRoomPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey, // Assign the GlobalKey
-      drawer: const CustomNavigationBar(
+      drawer: const CustomDrawer(
           firstName: "your firstname"), // Custom drawer with navigation
-
-      appBar: PreferredSize(
-        preferredSize:
-            const Size.fromHeight(150), // Adjust the height of the header
-        child: HeaderWidget(
-          title: 'Change Room',
-          leftIcon: Icons.menu,
-          rightIcon: Icons.person,
-          onLeftIconPressed: () {
-            _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-          },
-          onRightIconPressed: () {
-            // Handle profile icon press
-          },
-        ),
-      ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Current Building name\nand Room no.',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              const SizedBox(height: 20),
-              Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const HeaderWidget(title: 'Change Room'), // Add the HeaderWidget with title
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: currentRoomController,
-                      decoration: InputDecoration(
-                        labelText: 'Room No.',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
+                  const Text(
+                    'Current Building name\nand Room no.',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: currentRoomController,
+                          decoration: InputDecoration(
+                            labelText: 'Room No.',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
                         ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: TextFormField(
+                          controller: currentBuildingController,
+                          decoration: InputDecoration(
+                            labelText: 'Building',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 30),
+                  const Text(
+                    'Shift to Building name\nand Room no.',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: newRoomController,
+                          decoration: InputDecoration(
+                            labelText: 'Room No.',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: TextFormField(
+                          controller: newBuildingController,
+                          decoration: InputDecoration(
+                            labelText: 'Building',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 30),
+                  const Text(
+                    'Reason',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: reasonController,
+                    maxLines: 5,
+                    decoration: InputDecoration(
+                      hintText: 'Enter the reason for changing the room',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: TextFormField(
-                      controller: currentBuildingController,
-                      decoration: InputDecoration(
-                        labelText: 'Building',
-                        border: OutlineInputBorder(
+                  const SizedBox(height: 50), // Increase space above button
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: submitRoomChangeRequest, // Submit the request
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            const Color(0xFF33665A), // Set the button color
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 32, vertical: 12), // Adjust padding
+                      ),
+                      child: const Text(
+                        'Submit',
+                        style: TextStyle(
+                            color: Colors.white), // Set your desired color
                       ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 30),
-              const Text(
-                'Shift to Building name\nand Room no.',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: newRoomController,
-                      decoration: InputDecoration(
-                        labelText: 'Room No.',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: TextFormField(
-                      controller: newBuildingController,
-                      decoration: InputDecoration(
-                        labelText: 'Building',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 30),
-              const Text(
-                'Reason',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: reasonController,
-                maxLines: 5,
-                decoration: InputDecoration(
-                  hintText: 'Enter the reason for changing the room',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 50), // Increase space above button
-              Center(
-                child: ElevatedButton(
-                  onPressed: submitRoomChangeRequest, // Submit the request
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        const Color(0xFF33665A), // Set the button color
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 32, vertical: 12), // Adjust padding
-                  ),
-                  child: const Text(
-                    'Submit',
-                    style: TextStyle(
-                        color: Colors.white), // Set your desired color
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -1,25 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hms/Screens/complaintform_page.dart';
 import 'package:hms/Screens/drawer_screen.dart';
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Hostel Management System',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: const ComplaintMenuPage(), // Set the initial page to ComplaintMenuPage
-    );
-  }
-}
+import 'package:hms/Screens/header_widget.dart';// Import the HeaderWidget
 
 class ComplaintMenuPage extends StatelessWidget {
   const ComplaintMenuPage({super.key});
@@ -27,19 +9,11 @@ class ComplaintMenuPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const CustomNavigationBar(
-          firstName: "your firstname"), // Custom drawer with navigation
+      drawer: const CustomDrawer(firstName: ""), // Custom drawer with navigation
 
       body: Column(
         children: [
-          HeaderWidget(
-            title: 'Complaint',
-            leftIcon: Icons.menu,
-            rightIcon: Icons.person,
-            onRightIconPressed: () {
-              // Handle right icon press here (e.g., navigate to a profile page)
-            },
-          ),
+           const HeaderWidget(title: 'Complaint Menu'),
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
@@ -165,50 +139,6 @@ class ComplaintItem extends StatelessWidget {
               fontWeight: FontWeight.bold,
               color: Color(0xFF3D6257),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class HeaderWidget extends StatelessWidget {
-  final String title;
-  final IconData leftIcon;
-  final IconData rightIcon;
-  final VoidCallback onRightIconPressed;
-
-  const HeaderWidget({
-    super.key,
-    required this.title,
-    required this.leftIcon,
-    required this.rightIcon,
-    required this.onRightIconPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-      decoration: const BoxDecoration(
-        color: Color(0xFF3D6257), // Header background color
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Icon(leftIcon, color: Colors.white),
-          Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          IconButton(
-            icon: Icon(rightIcon, color: Colors.white),
-            onPressed: onRightIconPressed,
           ),
         ],
       ),

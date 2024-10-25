@@ -27,7 +27,7 @@ class ContactPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const CustomNavigationBar(firstName: '',), // Custom drawer with navigation
+      drawer: const CustomDrawer(firstName: '',), // Custom drawer with navigation
 
       backgroundColor: const Color(0xFFE6F4EC),
       appBar: CustomAppBar(

@@ -1,87 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-// HeaderWidget Class Definition
-class HeaderWidget extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
-  final IconData leftIcon;
-  final IconData rightIcon;
-  final VoidCallback onRightIconPressed;
-
-  const HeaderWidget({
-    super.key,
-    required this.title,
-    this.leftIcon = Icons.menu,
-    this.rightIcon = Icons.person,
-    required this.onRightIconPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(
-        top: 20,
-        bottom: 20,
-        left: 16,
-        right: 16,
-      ), // Padding for status bar and content
-      decoration: const BoxDecoration(
-        color: Color(0xFF33665A), // Background color
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Icon and profile button in the header
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                icon: Icon(
-                  leftIcon,
-                  color: Colors.white,
-                  size: 30.0,
-                ),
-                onPressed: () {
-                  Scaffold.of(context)
-                      .openDrawer(); // Open drawer when menu icon is pressed
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  rightIcon,
-                  color: Colors.white,
-                  size: 30.0,
-                ),
-                onPressed: onRightIconPressed,
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          // Title with centered text
-          Center(
-            child: Text(
-              title,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Implement preferredSize for PreferredSizeWidget
-  @override
-  Size get preferredSize => const Size.fromHeight(150);
-}
-
 // ComplaintFormPage Class Definition
 class ComplaintFormPage extends StatefulWidget {
   const ComplaintFormPage({super.key});
@@ -150,14 +69,6 @@ class _ComplaintFormPageState extends State<ComplaintFormPage> {
             ),
           ],
         ),
-      ),
-      appBar: HeaderWidget(
-        title: 'Complaints',
-        leftIcon: Icons.menu,
-        rightIcon: Icons.person,
-        onRightIconPressed: () {
-          // Handle right icon press, e.g., navigate to profile page
-        },
       ),
       body: SingleChildScrollView(
         child: Padding(

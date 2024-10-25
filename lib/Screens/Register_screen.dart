@@ -46,6 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           'firstName': _firstNameController.text.trim(),
           'lastName': _lastNameController.text.trim(),
           'email': _emailController.text.trim(),
+          'password': _passwordController.text.trim(),
           'phone': _phoneController.text.trim(),
           'buildingName': _buildingNameController.text.trim(),
           'roomNumber': _roomNameController.text.trim(),
@@ -54,8 +55,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
         // Show success SnackBar
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Registration Successful!'),
+          const SnackBar(
+            content: Text('Registration Successful!'),
             backgroundColor: Colors.green,
           ),
         );

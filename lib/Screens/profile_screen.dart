@@ -1,91 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:hms/Screens/drawer_screen.dart';
-
-void main() {
-  runApp(const ProfileApp());
-}
-
-class ProfileApp extends StatelessWidget {
-  const ProfileApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Profile Page',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: const ProfilePage(),
-    );
-  }
-}
+import 'package:hms/Screens/header_widget.dart'; // Import the header widget
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  final String firstName;
+
+  const ProfilePage({super.key, required this.firstName});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const CustomNavigationBar(
-          firstName: "your firstname"), // Custom drawer with navigation
-
+      drawer: CustomDrawer(firstName: firstName), // Custom drawer with navigation
       backgroundColor: const Color(0xFFE6F4EC), // Light background color
-      appBar: AppBar(
-        toolbarHeight: 120, // Adjust the height for the curve
-        backgroundColor:
-            const Color(0xFF3D6257), // Dark green color for the header
-        automaticallyImplyLeading: false, // Removes default back button
-        flexibleSpace: ClipPath(
-          clipper: CustomAppBarClipper(),
-          child: Container(
-            color: const Color(0xFF3D6257),
-            child: SafeArea(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ListTile(
-                    leading: IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Colors.white),
-                      onPressed: () {
-                        // Add your back button action here
-                      },
-                    ),
-                    title: const Center(
-                      child: Text(
-                        'Profile',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const CircleAvatar(
-                radius: 50,
-                backgroundColor: Colors.white,
-                backgroundImage: AssetImage('assets/profile_image.png'),
-              ),
+              const HeaderWidget(title: 'Your Profile',), // Use HeaderWidget here
               const SizedBox(height: 16),
-              const Text(
-                'Username',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
               const SizedBox(height: 30),
               buildInfoRow('Room No.', '101'),
               buildDivider(),
@@ -147,23 +81,5 @@ class ProfilePage extends StatelessWidget {
       thickness: 1.0,
       height: 20,
     );
-  }
-}
-
-class CustomAppBarClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    path.lineTo(0, size.height - 50);
-    path.quadraticBezierTo(
-        size.width / 2, size.height, size.width, size.height - 50);
-    path.lineTo(size.width, 0);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
-    return false;
   }
 }
