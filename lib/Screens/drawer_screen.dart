@@ -23,7 +23,6 @@ class CustomDrawer extends StatelessWidget {
           children: [
             UserAccountsDrawerHeader(
               accountName: Text(firstName), // Use firstName variable here
-              accountEmail: const Text('user@example.com'),
               currentAccountPicture: CircleAvatar(
                 backgroundColor: Colors.white,
                 child: Icon(
@@ -34,7 +33,7 @@ class CustomDrawer extends StatelessWidget {
               ),
               decoration: const BoxDecoration(
                 color: Color(0xFF33665A), // Header color
-              ),
+              ), accountEmail: null,
             ),
             ListTile(
               leading: const Icon(Icons.home, color: Colors.white),
@@ -64,14 +63,14 @@ class CustomDrawer extends StatelessWidget {
                             )));
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.menu_book, color: Colors.white),
-              title: const Text('Menu', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                // Navigate to the Menu screen directly
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => me()));
-              },
-            ),
+            // ListTile(
+            //   leading: const Icon(Icons.menu_book, color: Colors.white),
+            //   title: const Text('Menu', style: TextStyle(color: Colors.white)),
+            //   onTap: () {
+            //     // Navigate to the Menu screen directly
+            //     // Navigator.push(context, MaterialPageRoute(builder: (context) => me()));
+            //   },
+            // ),
             ListTile(
               leading: const Icon(Icons.report_problem, color: Colors.white),
               title:
