@@ -1,10 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:hms/Admin_Screens/admin_home_screen.dart';
 import 'package:hms/Screens/Login_screen.dart';
-import 'package:hms/Screens/fee_details_screen.dart';
-import 'package:hms/Screens/home_screen.dart';
-import 'package:hms/Screens/profile_screen.dart';
+import 'package:hms/Screens/Register_screen.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -33,7 +30,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginScreen(),
+      home: const RegisterScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

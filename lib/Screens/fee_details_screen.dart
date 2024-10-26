@@ -67,7 +67,7 @@ class _FeeDetailsState extends State<FeeDetails> {
                         .collection('admin_fees_details')
                         .where('email', isEqualTo: userEmail) // Filter by email
                         .snapshots()
-                    : Stream
+                    : const Stream
                         .empty(), // Return an empty stream if userEmail is not set
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {

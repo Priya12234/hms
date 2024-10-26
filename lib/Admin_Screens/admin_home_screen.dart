@@ -7,7 +7,7 @@ import 'package:hms/Admin_Screens/admin_custom_drawer.dart';
 
 
 class AdminHome extends StatefulWidget {
-  const AdminHome({Key? key}) : super(key: key);
+  const AdminHome({super.key});
 
   @override
   _AdminHomeState createState() => _AdminHomeState();

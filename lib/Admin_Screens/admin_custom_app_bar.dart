@@ -5,10 +5,10 @@ class AdminCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onProfilePressed;
 
   const AdminCustomAppBar({
-    Key? key,
+    super.key,
     required this.title,
     required this.onProfilePressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

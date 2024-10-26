@@ -3,7 +3,7 @@ import 'package:hms/Admin_Screens/admin_home_screen.dart';
 import 'package:hms/Admin_Screens/admin_student_details.dart';
 
 class AdminCustomDrawer extends StatelessWidget {
-  const AdminCustomDrawer({Key? key}) : super(key: key);
+  const AdminCustomDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,13 +11,13 @@ class AdminCustomDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          DrawerHeader(
-            decoration: const BoxDecoration(
+          const DrawerHeader(
+            decoration: BoxDecoration(
               color: Color(0xFF33665A),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
                   'Admin Dashboard',
                   style: TextStyle(

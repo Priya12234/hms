@@ -53,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => AdminHome(), // Replace with your Admin Dashboard
+              builder: (context) => const AdminHome(), // Replace with your Admin Dashboard
             ),
           );
         } else {

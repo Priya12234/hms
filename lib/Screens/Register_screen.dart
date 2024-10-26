@@ -101,28 +101,81 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildBackground(double screenHeight) {
-    return Container(
-      height: screenHeight * 0.3,
-      decoration: const BoxDecoration(
-        color: Color(0xFF33665A),
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(200),
-          bottomRight: Radius.circular(200),
+Widget _buildBackground(double screenHeight) {
+  return Stack(
+    children: [
+      // Background container with rounded corners and 'Sign Up' text
+      Container(
+        height: screenHeight * 0.3,
+        decoration: const BoxDecoration(
+          color: Color(0xFF33665A),
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(200),
+            bottomRight: Radius.circular(200),
+          ),
         ),
-      ),
-      child: const Center(
-        child: Text(
-          'Sign Up',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 40,
-            fontWeight: FontWeight.bold,
+        child: const Center(
+          child: Text(
+            'Sign Up',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),
-    );
-  }
+      // Lamp image at the upper right corner
+      Positioned(
+        top: 5,
+        right: 10,
+        child: Image.asset(
+          'assets/images/login_lamp.png', // Add your lamp image path here
+          width: 120, // Adjust size as needed
+          height: 120,
+        ),
+      ),
+    ],
+  );
+}
+@override
+Widget buildimage(BuildContext context) {
+  final screenWidth = MediaQuery.of(context).size.width;
+  final screenHeight = MediaQuery.of(context).size.height;
+
+  return Scaffold(
+    backgroundColor: const Color(0xFFE6F4EC), // Background color
+    body: Stack(
+      children: [
+        // Background container with the image included
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: screenHeight * 0.3, // 30% of screen height
+          child: _buildBackground(screenHeight),
+        ),
+        // Centered register.png image below the rounded container
+        Positioned(
+            top: screenHeight *
+                0.08, // Adjust position to move the image upwards
+            left: screenWidth * 0.1,
+            right: 0,
+            child: Align(
+              alignment: Alignment.center,
+              child: SizedBox(
+                height: screenHeight * 0.3, // Adjust height as needed
+                child: Image.asset(
+                  'assets/images/singup_logo_top.png', // Replace with your image
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+      ],
+    ),
+  );
+}
 
   Widget _buildForm(double screenWidth, double screenHeight) {
     return Padding(
