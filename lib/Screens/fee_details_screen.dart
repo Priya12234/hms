@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hms/Screens/header_widget.dart'; // Import your HeaderWidget
 import 'package:shared_preferences/shared_preferences.dart';
+import 'razorpay_payment.dart'; // Import the RazorpayPayment class
 
 class FeeDetails extends StatefulWidget {
   const FeeDetails({super.key});
@@ -12,6 +13,7 @@ class FeeDetails extends StatefulWidget {
 
 class _FeeDetailsState extends State<FeeDetails> {
   String? userEmail; // Variable to hold the user email
+  late RazorpayPayment _razorpayPayment;
 
   @override
   void initState() {
@@ -19,10 +21,17 @@ class _FeeDetailsState extends State<FeeDetails> {
     _getUserEmail(); // Fetch the user email when the widget initializes
   }
 
+  @override
+  void dispose() {
+    _razorpayPayment.dispose(); // Dispose Razorpay resources when done
+    super.dispose();
+  }
+
   // Function to get the user email based on their ID from Firestore
   Future<void> _getUserEmail() async {
     final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getString('userId'); // Fetch the user ID from SharedPreferences
+    final userId =
+        prefs.getString('userId'); // Fetch the user ID from SharedPreferences
 
     if (userId != null) {
       // Fetch the user email from Firestore based on the user ID
@@ -33,18 +42,13 @@ class _FeeDetailsState extends State<FeeDetails> {
 
       if (userDoc.exists) {
         setState(() {
-          userEmail = userDoc['email']; // Assuming the email field is named 'email'
+          userEmail =
+              userDoc['email']; // Assuming the email field is named 'email'
+          _razorpayPayment = RazorpayPayment(
+              userEmail); // Initialize RazorpayPayment with user email
         });
       }
     }
-  }
-
-  // Function to handle status update (paid/unpaid) in Firestore
-  Future<void> updateStatus(String documentId, String status) async {
-    await FirebaseFirestore.instance
-        .collection('admin_fees_details')
-        .doc(documentId)
-        .update({'status': status});
   }
 
   @override
@@ -52,7 +56,8 @@ class _FeeDetailsState extends State<FeeDetails> {
     return Scaffold(
       body: Column(
         children: [
-          const HeaderWidget(title: 'Fees Details'), // Add the HeaderWidget here
+          const HeaderWidget(
+              title: 'Fees Details'), // Add the HeaderWidget here
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Expanded(
@@ -62,72 +67,72 @@ class _FeeDetailsState extends State<FeeDetails> {
                         .collection('admin_fees_details')
                         .where('email', isEqualTo: userEmail) // Filter by email
                         .snapshots()
-                    : Stream.empty(), // Return an empty stream if userEmail is not set
+                    : Stream
+                        .empty(), // Return an empty stream if userEmail is not set
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   }
-            
+
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                     return const Center(child: Text('No data available'));
                   }
-            
+
                   final documents = snapshot.data!.docs;
-            
+
                   return SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        border: TableBorder.all(
-                          width: 1,
-                          color: Colors.grey,
-                        ), // Adding border to the table
-                        columns: const [
-                          DataColumn(label: Text('Email')),
-                          DataColumn(label: Text('Building')),
-                          DataColumn(label: Text('Type')),
-                          DataColumn(label: Text('Fees')),
-                          DataColumn(label: Text('Status')),
-                          DataColumn(label: Text('Date')),
-                        ],
-                        rows: documents.map<DataRow>((doc) {
-                          final data = doc.data() as Map<String, dynamic>;
-                          final documentId = doc.id; // Get document ID for updating
-            
-                          final String status = data['status'];
-                          final bool isPaid = status == 'paid';
-                          final Color statusColor = isPaid ? Colors.green : Colors.red;
-                          final String statusLabel = isPaid ? 'Paid' : 'Unpaid';
-            
-                          return DataRow(
-                            cells: [
-                              DataCell(Text(data['email'])),
-                              DataCell(Text(data['building'])),
-                              DataCell(Text(data['type'])),
-                              DataCell(Text(data['fees'].toString())), // Ensure fees are displayed correctly
-                              DataCell(
+                    child: Column(
+                      children: documents.map<Widget>((doc) {
+                        final data = doc.data() as Map<String, dynamic>;
+                        final String status = data['status'];
+                        final bool isPaid = status == 'paid';
+
+                        return Card(
+                          elevation: 4,
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 4),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Email: ${data['email']}',
+                                    style: const TextStyle(fontSize: 18)),
+                                Text('Building: ${data['building']}',
+                                    style: const TextStyle(fontSize: 16)),
+                                Text('Type: ${data['type']}',
+                                    style: const TextStyle(fontSize: 16)),
+                                Text('Fees: ₹${data['fees'].toString()}',
+                                    style: const TextStyle(fontSize: 16)),
+                                Text('Status: ${isPaid ? 'Paid' : 'Unpaid'}',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: isPaid ? Colors.green : Colors.red,
+                                    )),
+                                Text('Date: ${data['date']}',
+                                    style: const TextStyle(fontSize: 16)),
+                                const SizedBox(height: 10),
                                 ElevatedButton(
                                   onPressed: isPaid
-                                      ? null // Disable the button if already paid
-                                      : () {
-                                          updateStatus(documentId, 'paid');
-                                        },
+                                      ? null
+                                      : () => _razorpayPayment.openCheckout(
+                                          context,
+                                          doc.id), // Pass the context here
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: statusColor, // Set green for paid, red for unpaid
-                                    minimumSize: const Size(80, 40), // Button size
+                                    backgroundColor: isPaid
+                                        ? Colors.grey
+                                        : Colors
+                                            .blue, // Change color based on payment status
                                   ),
-                                  child: Text(
-                                    statusLabel,
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
+                                  child: Text(isPaid ? 'Paid' : 'Pay Now',
+                                      style:
+                                          const TextStyle(color: Colors.white)),
                                 ),
-                              ),
-                              DataCell(Text(data['date'])),
-                            ],
-                          );
-                        }).toList(),
-                      ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }).toList(),
                     ),
                   );
                 },
