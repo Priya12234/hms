@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:hms/Screens/Login_screen.dart';
 import 'package:hms/Screens/Register_screen.dart';
 import 'firebase_options.dart';
 
