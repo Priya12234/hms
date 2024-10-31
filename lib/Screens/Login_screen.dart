@@ -48,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
         String firstName = userDoc['firstName'] ?? 'User';
         String email = _emailController.text.trim();
 
-        if (email == 'pchauhan862@rku.ac.in') {
+        if (email == 'pchauhan862@rku.ac.in' || email == 'idavda079@rku.ac.in') {
           // Navigate to Admin Dashboard
           Navigator.pushReplacement(
             context,

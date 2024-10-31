@@ -9,6 +9,7 @@ class RazorpayPayment {
     _razorpay = Razorpay();
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, handleExternalWallet);
   }
 
   void dispose() {
@@ -17,29 +18,37 @@ class RazorpayPayment {
 
   void openCheckout(BuildContext context, String documentId) async {
     var options = {
-      'key': 'YOUR_RAZORPAY_KEY', // Replace with your Razorpay Key
+      'key': 'rzp_test_REo0zhqvsLnl6Y', // Replace with your Razorpay Key
       'amount': 50000, // Amount in paise (50000 paise = ₹500)
       'name': 'Hostel Fee',
       'description': 'Payment for hostel fees',
       'prefill': {
-        'email': userEmail,
-        'contact': 'YOUR_CONTACT_NUMBER', // Optional: replace with user's contact number
-      },
-      'external': {
-        'wallets': ['paypal'] // Optional
+        'email': userEmail ?? 'test@example.com',
+        'contact': 'YOUR_CONTACT_NUMBER', // Replace with user’s contact if available
       }
     };
 
     try {
       _razorpay.open(options);
     } catch (e) {
-      // Display an error dialog to the user
       _showErrorDialog(context, 'Error', 'Failed to open checkout: ${e.toString()}');
       print(e.toString());
     }
   }
 
-  // Method to show error dialog
+  void handlePaymentSuccess(PaymentSuccessResponse response) {
+    print('Payment Success: ${response.paymentId}');
+    // Update payment status in Firestore here if needed
+  }
+
+  void handlePaymentError(PaymentFailureResponse response) {
+    print('Payment Error: ${response.message}');
+  }
+
+  void handleExternalWallet(ExternalWalletResponse response) {
+    print('External Wallet: ${response.walletName}');
+  }
+
   void _showErrorDialog(BuildContext context, String title, String message) {
     showDialog(
       context: context,
@@ -56,16 +65,5 @@ class RazorpayPayment {
         );
       },
     );
-  }
-
-  void handlePaymentSuccess(PaymentSuccessResponse response) {
-    // Handle successful payment here
-    print('Payment Success: ${response.paymentId}');
-    // You can also update the payment status in Firestore here
-  }
-
-  void handlePaymentError(PaymentFailureResponse response) {
-    // Handle payment failure here
-    print('Payment Error: ${response.message}');
   }
 }
