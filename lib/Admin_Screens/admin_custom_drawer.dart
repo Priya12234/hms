@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hms/Admin_Screens/admin_exitpss_request.dart';
 import 'package:hms/Admin_Screens/admin_home_screen.dart';
 import 'package:hms/Admin_Screens/admin_student_details.dart';
+import 'package:hms/Admin_Screens/admin_student_fees_details.dart';
 
 class AdminCustomDrawer extends StatelessWidget {
   const AdminCustomDrawer({super.key});
@@ -42,7 +44,9 @@ class AdminCustomDrawer extends StatelessWidget {
               Navigator.pop(context); // Close the drawer
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const AdminHome()), // Navigate directly to AdminHome
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const AdminHome()), // Navigate directly to AdminHome
               );
             },
           ),
@@ -54,7 +58,37 @@ class AdminCustomDrawer extends StatelessWidget {
               Navigator.pop(context); // Close the drawer
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const AdminStudentDetails()), // Navigate directly to SettingsScreen
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const AdminStudentDetails()), // Navigate directly to SettingsScreen
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.table_rows),
+            title: const Text('Fees Details'),
+            onTap: () {
+              // Navigate to Settings screen
+              Navigator.pop(context); // Close the drawer
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const AdminFeesDetails()), // Navigate directly to SettingsScreen
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.table_rows),
+            title: const Text('Exitpass'),
+            onTap: () {
+              // Navigate to Settings screen
+              Navigator.pop(context); // Close the drawer
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const AdminPage()), // Navigate directly to SettingsScreen
               );
             },
           ),

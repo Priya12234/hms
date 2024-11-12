@@ -42,18 +42,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
         DocumentSnapshot userDoc = await _firestore
             .collection('users')
-            .doc(userCredential.user?.uid)
+            .doc(userCredential.user!.uid)
             .get();
 
         String firstName = userDoc['firstName'] ?? 'User';
         String email = _emailController.text.trim();
 
-        if (email == 'pchauhan862@rku.ac.in' || email == 'idavda079@rku.ac.in') {
+        // Check if the email is an admin email
+        if (email == 'admin@gmail.com' ||
+            email == 'pchauhan862@rku.ac.in' ||
+            email == 'idavda079@rku.ac.in') {
           // Navigate to Admin Dashboard
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const AdminHome(), // Replace with your Admin Dashboard
+              builder: (context) => const AdminHome(),
             ),
           );
         } else {
@@ -66,6 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         }
       } on FirebaseAuthException catch (e) {
+        // Error handling for Firebase authentication
         if (e.code == 'user-not-found') {
           _showDialog('Error', 'No user found for that email.');
         } else if (e.code == 'wrong-password') {
@@ -73,6 +77,9 @@ class _LoginScreenState extends State<LoginScreen> {
         } else {
           _showDialog('Error', e.message ?? 'Login failed.');
         }
+      } catch (e) {
+        // General error handling
+        _showDialog('Error', 'An unexpected error occurred.');
       }
     }
   }
@@ -118,7 +125,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                _buildTextField(_emailController, 'Email', Icons.email_outlined),
+                _buildTextField(
+                    _emailController, 'Email', Icons.email_outlined),
                 _buildPasswordTextField(),
                 const SizedBox(height: 30),
                 _loginButton(),
